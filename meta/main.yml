@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: VerosK
+  description: This role sets-up proftpd with virtual FTP users and optional TLS
+  license: BSD
+  min_ansible_version: 2.3
+  platforms:
+  - name: EL
+    versions:
+    - 7
+
+dependencies: []
