@@ -1,0 +1,4 @@
+- name: reload proftpd
+  service:
+    name: 'proftpd'
+    state: reloaded

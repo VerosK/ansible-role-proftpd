@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# this is very dumb make user script.
+# Change it to something sane, please.
+
+import os
+from crypt import crypt
+
+OUT_NAME = '{{ proftpd_users_list }}'
+
+USER=dict(
+    name="{{ proftpd_default_user }}",
+    password=crypt("{{ proftpd_default_user_password }}", "$1$ftp$"),
+    uid={{ proftpd_default_user_uid }}, gid={{ proftpd_default_user_gid }},
+    gecos="{{ proftpd_default_user_gecos }}",
+    dir="{{ proftpd_default_user_homedir }}")
+
+USER_LINE = "{name}:{password}:{uid}:{gid}:{gecos}:{dir}".format(**USER)
+
+
+def main():
+    #if os.path.isfile(OUT_NAME):
+    #    print("File {} already exists, skipping".format(OUT_NAME))
+    #    return
+    with open(OUT_NAME, "wt") as f:
+        f.write("{}\n".format(USER_LINE))
+    os.chmod(OUT_NAME, 0o600)
+
+if __name__ == '__main__':
+    main()

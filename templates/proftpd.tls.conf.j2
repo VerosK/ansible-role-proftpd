@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+# protftp TLS settings
+TLSEngine on
+TLSLog {{ proftpd_tls_logfile }}
+TLSProtocol {{ proftpd_protocol|default("TLSv1") }}
+
+{% if proftpd_tls_required %}
+TLSRequired {{ proftpd_tls_required|default("auth+data") }}
+{% endif %}
+
+{% if protftp_tls_rsa_cert  %}
+TLSRSACertificateFile {{ protftp_tls_rsa_cert }}
+TLSRSACertificateKeyFile {{ protftp_tls_rsa_key }}
+{% endif %}
+
+{% if protftp_tls_ec_cert %}
+TLSECCertificateFile {{ protftp_tls_ec_cert }}
+TLSECCertificateKeyFile {{ protftp_tls_ec_key }}
+{% endif %}
+
+# CA the server trusts
+TLSCACertificateFile {{ protftp_tls_ca_cert }}
+
+TLSVerifyClient off
+TLSRenegotiate none
+
+# workaround for old clients bug "client did not reuse SSL session"
+# disable if possible
+TLSOptions NoSessionReuseRequired

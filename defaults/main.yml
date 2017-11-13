@@ -1,0 +1,52 @@
+proftpd_packages:
+  - proftpd
+
+proftpd_config_dir: /etc/proftpd
+proftpd_config: /etc/proftpd.conf
+proftpd_tls_config: "{{ proftpd_config_dir }}/tls.conf"
+
+proftpd_port: 21
+proftpd_passive_ports: 59500 59999
+
+proftpd_user: nobody
+proftpd_group: nobody
+
+proftpd_server_name: '{{ ansible_fqdn }}'
+
+proftpd_with_tls: True
+
+# TLSRequired streams
+# Full ref: http://www.proftpd.org/docs/directives/linked/config_ref_TLSRequired.html
+proftpd_tls_required: "auth+data"
+# proftpd_tls_required: "on"
+
+proftpd_tls_logfile: /var/log/proftpd/tls.log
+#proftpd_tls_logfile: ~
+
+protftp_tls_rsa_cert: /etc/pki/proftpd.crt
+protftp_tls_rsa_key: /etc/pki/proftpd.key
+protftp_tls_ec_cert: ~
+protftp_tls_ec_key: ~
+
+protftp_tls_ca_cert: /etc/pki/ca.crt
+
+
+# User management
+proftpd_users_list: /etc/proftpd/users
+proftpd_users_initial_content: "# placeholder \n"
+proftpd_groups_list: /etc/proftpd/groups
+proftpd_groups_initial_content: "# placeholder \n"
+
+#protftp_tls_ec_cert: /etc/pki/proftpd.crt
+#protftp_tls_ec_key: /etc/pki/proftpd.key
+
+proftpd_user_creation_source: 'proftpd-make-users.j2'
+proftpd_user_creation_script: '{{ proftpd_config_dir }}/generate-users'
+
+# create default user?
+proftpd_default_user: nbusr
+proftpd_default_user_password: nbusr123  # change this
+proftpd_default_user_uid: 1002
+proftpd_default_user_gid: 1002
+proftpd_default_user_gecos: "Default user"
+proftpd_default_user_homedir: "/var/ftp/changeme"

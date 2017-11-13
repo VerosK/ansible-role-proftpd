@@ -1,0 +1,55 @@
+- name: Install packages
+  yum:
+    name: '{{ proftpd_packages }}'
+    state: present
+
+- name: Create config dir
+  file:
+    dest: '{{ proftpd_config_dir }}'
+    state: directory
+
+- name: Create temporary user file
+  copy:
+    content: "{{ proftpd_users_initial_content }}"
+    dest: '{{ proftpd_users_list }}'
+    force: false
+
+- name: Create temporary groups file
+  copy:
+    content: "{{ proftpd_groups_initial_content }}"
+    dest: '{{ proftpd_groups_list }}'
+    force: false
+
+- name: Upload proftpd configs
+  template:
+    src: proftpd.conf.j2
+    dest: '{{ proftpd_config }}'
+    backup: true
+  notify: reload proftpd
+
+- name: Upload proftpd TLS config
+  template:
+    src: proftpd.tls.conf.j2
+    dest: '{{ proftpd_tls_config }}'
+    backup: true
+  when: proftpd_with_tls
+  notify: reload proftpd
+
+- name: Upload protfpd users creation script
+  template:
+    src: '{{ proftpd_user_creation_source }}'
+    dest: '{{ proftpd_user_creation_script }}'
+    mode: 700
+    backup: yes
+  register: _proftp_script
+
+- name: Run the the script when required
+  shell: '{{ proftpd_user_creation_script }}'
+  when: _proftp_script|changed
+
+- name: Start profptd
+  service:
+    name: proftpd
+    state: started
+    enabled: true
+
