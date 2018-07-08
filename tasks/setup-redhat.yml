@@ -1,0 +1,4 @@
+- name: Install packages
+  yum:
+    name: '{{ proftpd_packages_yum }}'
+    state: present

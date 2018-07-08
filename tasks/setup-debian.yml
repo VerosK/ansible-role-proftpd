@@ -1,0 +1,4 @@
+- name: Install packages
+  apt:
+    name: '{{ proftpd_packages_apt }}'
+    state: present

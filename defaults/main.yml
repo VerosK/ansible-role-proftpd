@@ -1,5 +1,8 @@
-proftpd_packages:
+proftpd_packages_yum:
   - proftpd
+
+proftpd_packages_apt:
+  - proftpd-basic
 
 proftpd_config_dir: /etc/proftpd
 proftpd_config: /etc/proftpd.conf
