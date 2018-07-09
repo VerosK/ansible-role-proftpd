@@ -88,8 +88,10 @@ SystemLog   /var/log/proftpd/proftpd.log
 {% if proftpd_with_tls|default(True) %}
 Include {{ proftpd_tls_config }}
 {% else %}
+<IfModule mod_tls.c>
 # disable TLS
 TLSEngine off
+</IfModule>
 {% endif %}
 
 <IfModule mod_quota.c>
