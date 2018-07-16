@@ -26,7 +26,7 @@
     src: proftpd.conf.j2
     dest: '{{ proftpd_config }}'
     backup: true
-  notify: reload proftpd
+  notify: restart proftpd
 
 - name: Upload proftpd TLS config
   template:
@@ -34,7 +34,7 @@
     dest: '{{ proftpd_tls_config }}'
     backup: true
   when: proftpd_with_tls
-  notify: reload proftpd
+  notify: restart proftpd
 
 - name: Upload protfpd users creation script
   template:
@@ -43,10 +43,15 @@
     mode: 700
     backup: yes
   register: _proftp_script
+  notify: restart proftpd
 
 - name: Run the the script when required
   shell: '{{ proftpd_user_creation_script }}'
   when: _proftp_script|changed
+
+  # make sure proftpd is restarted when required
+
+- meta: flush_handlers
 
 - name: Start profptd
   service:

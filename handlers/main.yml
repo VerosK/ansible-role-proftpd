@@ -1,4 +1,4 @@
-- name: reload proftpd
+- name: restart proftpd
   service:
     name: 'proftpd'
-    state: reloaded
+    state: restarted
